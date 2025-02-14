@@ -79,7 +79,7 @@ try:
   tape+=pileup
 
   # Run!
-  evts = [int(evt) for evt in args.event_numbers.split(",")] if args.event_numbers else args.nov
+  evts = [int(evt) for evt in args.event_numbers.split(",")] if args.event_numbers else args.number_of_events
   tape.run(evts)
 
   sys.exit(0)

@@ -36,6 +36,6 @@ if len(sys.argv)==1:
   sys.exit(1)
 
 args = parser.parse_args()
-command = f"{args.executable} {args.nov} {args.eventNumber} {args.seed} {args.config} {args.output}"
+command = f"{args.executable} {args.number_of_events} {args.eventNumber} {args.seed} {args.config} {args.output}"
 print(command)
 os.system(command)
