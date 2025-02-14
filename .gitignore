@@ -30,5 +30,5 @@ build
 executables
 *.exe
 
-# removeing test
+# remving test
 *.done
