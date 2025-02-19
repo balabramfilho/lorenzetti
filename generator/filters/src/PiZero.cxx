@@ -52,7 +52,7 @@ StatusCode PiZero::execute( generator::Event &ctx )
 
   for (auto part : evt.particles()) 
   {
-    // Is electron and final state?
+    // Is photon and final state?
     if (part->abs_pid() == 22 && ParticleHelper::isFinal(part.get()) )
     {
       if(part->parents().empty()){
@@ -60,16 +60,16 @@ StatusCode PiZero::execute( generator::Event &ctx )
       }
 
       auto mother = part->parents().at(0);
-      // The mother is Z?
-      if( mother->pid() == 211)
+      // The mother is Pi0?
+      if( mother->pid() == 111)
       {
         float eta = part->momentum().eta();
         float pt = part->momentum().pt();
         if ( std::abs(eta) < m_etaMax && pt > (m_minPt/1.e3) ){
           PiZero.push_back( part.get() );
         }
-      }// From Z?
-    }// Is electron?
+      }// From Pi0?
+    }// Is photon?
   }
 
   if ( PiZero.empty() ){

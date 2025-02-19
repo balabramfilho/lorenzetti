@@ -22,8 +22,8 @@ Beams:eCM = 14000.                 ! CM energy of collision
 WeakBosonAndParton:qg2gmZq = on     !
 WeakBosonAndParton:qqbar2gmZg = on  !
 !WeakZ0:gmZmode = 2                  ! (default = 0; minimum = 0; maximum = 2)
-211:onMode = off                    ! Turn off Pi0 decays
-211:onIfMatch = -22 22              ! Turn on decays into Pi0
+111:onMode = off                    ! Turn off Pi0 decays
+111:onIfMatch = 22 22              ! Turn on decays into Pi0
 PhaseSpace:mHatMin = 1.             ! Z window
 PhaseSpace:mHatMax = 120.           ! Z window
 ! PhaseSpace:pTHatMin = 50.         ! minimal pT scale in process

@@ -20,6 +20,7 @@ MoreFilesForYou-*
 .asetup.save
 build
 .python-version
+.__afs*
 
 # vscode
 ./.vscode/*
