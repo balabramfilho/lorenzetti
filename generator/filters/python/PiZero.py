@@ -1,10 +1,10 @@
-__all__ = ["Pi0"]
+__all__ = ["PiZero"]
 
 from GaugiKernel import Cpp
 from ROOT import generator
 
 
-class Pi0(Cpp):
+class PiZero(Cpp):
 
     def __init__(self, name, gen,
                  EtaMax: float = 1.4,
@@ -14,7 +14,7 @@ class Pi0(Cpp):
                  OutputLevel: int = 0
                  ):
 
-        Cpp.__init__(self, generator.Pi0(name, gen.core()))
+        Cpp.__init__(self, generator.PiZero(name, gen.core()))
         self.__gen = gen
 
         self.setProperty("EtaMax", EtaMax)

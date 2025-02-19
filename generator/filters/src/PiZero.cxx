@@ -1,11 +1,11 @@
 
 #include <cmath>
-#include "Pi0.h"
+#include "PiZero.h"
 #include "helper.h"
 
 using namespace generator;
 
-Pi0::Pi0(const std::string name, IGenerator *gen):
+PiZero::PiZero(const std::string name, IGenerator *gen):
   IAlgorithm(gen),
   IMsgService(name)
 {
@@ -16,11 +16,11 @@ Pi0::Pi0(const std::string name, IGenerator *gen):
 }
 
 
-Pi0::~Pi0()
+PiZero::~PiZero()
 {;}
 
 
-StatusCode Pi0::initialize()
+StatusCode PiZero::initialize()
 {
   setMsgLevel(m_outputLevel);
   if(generator()->initialize().isFailure()){
@@ -32,7 +32,7 @@ StatusCode Pi0::initialize()
 
 
 
-StatusCode Pi0::execute( generator::Event &ctx )
+StatusCode PiZero::execute( generator::Event &ctx )
 {
 
   HepMC3::GenEvent evt( HepMC3::Units::GEV, HepMC3::Units::MM);
@@ -48,7 +48,7 @@ StatusCode Pi0::execute( generator::Event &ctx )
   const auto main_event_z = sample_z();
 
 
-  std::vector<const HepMC3::GenParticle*> Pi0; 
+  std::vector<const HepMC3::GenParticle*> PiZero; 
 
   for (auto part : evt.particles()) 
   {
@@ -66,20 +66,20 @@ StatusCode Pi0::execute( generator::Event &ctx )
         float eta = part->momentum().eta();
         float pt = part->momentum().pt();
         if ( std::abs(eta) < m_etaMax && pt > (m_minPt/1.e3) ){
-          Pi0.push_back( part.get() );
+          PiZero.push_back( part.get() );
         }
       }// From Z?
     }// Is electron?
   }
 
-  if ( Pi0.empty() ){
-    MSG_DEBUG( "There is not Pi0 event inside of this event");
+  if ( PiZero.empty() ){
+    MSG_DEBUG( "There is not PiZero event inside of this event");
     throw NotInterestingEvent();
   }
 
   if (m_forceForwardPhoton){
     int fwdPhotonCounter = 0;
-    for ( auto& e : Pi0 ){
+    for ( auto& e : PiZero ){
       float eta = e->momentum().eta();
       if (std::abs(eta) > 2.5 && std::abs(eta) < 3.2){
         fwdPhotonCounter++;
@@ -91,10 +91,10 @@ StatusCode Pi0::execute( generator::Event &ctx )
     }
   }
 
-  MSG_INFO("Filling Pi0 events into the context...");
+  MSG_INFO("Filling PiZero events into the context...");
 
   // Each electron is a seed
-  for ( auto& e : Pi0 ){
+  for ( auto& e : PiZero ){
 
     auto seed = generator::Seed( e->momentum().eta(), e->momentum().phi() );
 
@@ -132,9 +132,9 @@ StatusCode Pi0::execute( generator::Event &ctx )
 
 
 
-StatusCode Pi0::finalize()
+StatusCode PiZero::finalize()
 {
-  MSG_INFO( "Finalize the Pi0 Event." );
+  MSG_INFO( "Finalize the PiZero Event." );
   if(generator()->finalize().isFailure()){
     MSG_FATAL("Its not possible to finalize the generator. Abort!");
   }

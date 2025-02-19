@@ -15,7 +15,7 @@
 #pragma link C++ nestedclass;
 
 #pragma link C++ class generator::Zee+;
-#pragma link C++ class generator::Pi0+;
+#pragma link C++ class generator::PiZero+;
 #pragma link C++ class generator::JF17+;
 #pragma link C++ class generator::Pileup+;
 #pragma link C++ class generator::FixedRegion+;

@@ -2,6 +2,7 @@
 file(GLOB SOURCES src/*.cxx )
 file(GLOB_RECURSE HEADERS 
                         src/Zee.h
+                        src/PiZero.h
                         src/JF17.h
                         src/Pileup.h
                         src/FixedRegion.h

@@ -51,14 +51,14 @@ def run(args):
 
   try:  
     from evtgen import Pythia8 
-    from filters import Pi0
+    from filters import PiZero
     from GenKernel import EventTape
 
     tape = EventTape( "EventTape", OutputFile = args.output_file, RunNumber = args.run_number)
 
-    main_file = os.environ['LZT_PATH']+'/generator/evtgen/data/pi0_config.cmnd'
+    main_file = os.environ['LZT_PATH']+'/generator/evtgen/data/PiZero_config.cmnd'
 
-    Pi0 = Pi0( "Pi0", 
+    PiZero = PiZero( "PiZero", 
               Pythia8("Generator", 
                       File=main_file, 
                       Seed=args.seed),
@@ -68,7 +68,7 @@ def run(args):
               ForceForwardPhoton = args.force_forward_photon,
               OutputLevel          = outputLevel
              )
-    tape+=Pi0
+    tape+=PiZero
 
     if args.pileup_avg > 0:
 

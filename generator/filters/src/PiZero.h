@@ -1,17 +1,17 @@
-#ifndef Evtgen_Pi0_h
-#define Evtgen_Pi0_h
+#ifndef Evtgen_PiZero_h
+#define Evtgen_PiZero_h
 
 #include "GenKernel/IAlgorithm.h"
 #include "GenKernel/IGenerator.h"
 
 namespace generator{
 
-  class Pi0 : public IAlgorithm
+  class PiZero : public IAlgorithm
   {
     public:
     
-      Pi0(const std::string , IGenerator *);
-      ~Pi0();
+      PiZero(const std::string , IGenerator *);
+      ~PiZero();
   
       virtual StatusCode initialize() override;
       virtual StatusCode execute( Event& ) override;
