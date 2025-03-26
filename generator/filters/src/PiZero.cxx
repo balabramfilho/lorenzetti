@@ -63,38 +63,43 @@ StatusCode PiZero::execute( generator::Event &ctx )
   if (generator()->execute(evt).isFailure()){
     return StatusCode::FAILURE;
   }
-  // photonContainer = PiZero::buildPhotonContainer(evt);
-  std::vector<const HepMC3::GenParticle*> photonContainer; 
-  for (auto part : evt.particles()) 
-  {
-    if (part->abs_pid() == 22 && ParticleHelper::isFinal(part.get()) )
-    {
-      if ( std::abs(part->momentum().eta()) < m_etaMax && part->momentum().pt() > (m_minPt/1.e3) ){
-        photonContainer.push_back( part.get() );
-      }
-    }
-  }
+  // // photonContainer = PiZero::buildPhotonContainer(evt);
+  // std::vector<const HepMC3::GenParticle*> photonContainer; 
+  // for (auto part : evt.particles()) 
+  // {
+  //   if (part->abs_pid() == 22 && ParticleHelper::isFinal(part.get()) )
+  //   {
+  //     MSG_DEBUG("Found 2 photons.")
+  //     if ( std::abs(part->momentum().eta()) < m_etaMax && part->momentum().pt() > (m_minPt/1.e3) ){
+  //       photonContainer.push_back( part.get() );
+  //     }
+  //   }
+  // }
 
-  // Sort the photonContainer based on pt() using a lambda function as comparator
-  std::sort(photonContainer.begin(), photonContainer.end(), 
-  [](const HepMC3::GenParticle* a, const HepMC3::GenParticle* b) {
-      return a->momentum().pt() > b->momentum().pt();
-  });
+  // // Sort the photonContainer based on pt() using a lambda function as comparator
+  // std::sort(photonContainer.begin(), photonContainer.end(), 
+  // [](const HepMC3::GenParticle* a, const HepMC3::GenParticle* b) {
+  //     return a->momentum().pt() > b->momentum().pt();
+  // });
     
   const auto main_event_t = sample_t();
   const auto main_event_z = sample_z();
 
-  std::vector<const HepMC3::GenParticle*> PiZero; 
+  std::vector<const HepMC3::GenParticle*> PiZero;
+  // std::vector<const HepMC3::GenParticle*> realPiZero;
 
   // if (photonContainer.size() >= 2){
   //   for (auto photon :photonContainer){
+  //     MSG_DEBUG("[Photon Container] Found 2 photons.")
   //     auto mother = photon->parents().at(0);
   //     if( mother->pid() == 111)
   //     {
+  //       MSG_DEBUG("Has mother PiZero.")
   //       float eta = photon->momentum().eta();
   //       float pt = photon->momentum().pt();
   //       if ( std::abs(eta) < m_etaMax && pt > (m_minPt/1.e3) ){
-  //         PiZero.push_back( photon );
+  //         realPiZero.push_back( photon );
+  //         MSG_DEBUG("Found a photon.")
   //       }
   //     }// From Pi0?
   //   }
@@ -102,12 +107,12 @@ StatusCode PiZero::execute( generator::Event &ctx )
 
   for (auto part : evt.particles()) 
   {
-    MSG_DEBUG("Particle info:\n" <<
-      "PID: " << part->abs_pid() << "\n" <<
-      "Pt: " << part->momentum().pt() << "\n" <<
-      "Eta: " << part->momentum().eta() << "\n" <<
-      "Phi: " << part->momentum().phi() << "\n" <<
-      "Final State: " << ParticleHelper::isFinal(part.get()));
+    // MSG_DEBUG("Particle info:\n" <<
+    //   "PID: " << part->abs_pid() << "\n" <<
+    //   "Pt: " << part->momentum().pt() << "\n" <<
+    //   "Eta: " << part->momentum().eta() << "\n" <<
+    //   "Phi: " << part->momentum().phi() << "\n" <<
+    //   "Final State: " << ParticleHelper::isFinal(part.get()));
     // Is photon and final state?
     if (part->abs_pid() == 22 && ParticleHelper::isFinal(part.get()) )
     {
