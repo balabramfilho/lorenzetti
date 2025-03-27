@@ -5,7 +5,7 @@
 ## gen_pizero
 ```
 cd tests
-gen_piZero.py --nov 2 -o Pi0.EVT.root &> pi_zero.log&
+gen_piZero.py --nov 10 -o Pi0.EVT.root &> pi_zero.log&
 ```
 
 

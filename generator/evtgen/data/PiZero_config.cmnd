@@ -1,3 +1,6 @@
+! 0) Define the random seed of the event generator
+Random:setSeed = on
+Random:seed = 12345
 
 ! 1) Settings used in the main program.
 Main:numberOfEvents = 100          ! number of events to generate
@@ -19,13 +22,23 @@ Beams:eCM = 14000.                 ! CM energy of collision
 
 ! 4) Settings for the hard-process generation.
 ! Example 1: QCD + prompt photon production; must set pTmin.
-HardQCD:all = on                       ! Added for PiZero
-HadronLevel:all = on                   ! Added for PiZero
+! HardQCD:all = on                       ! Added for PiZero
+! HadronLevel:all = on                   ! Added for PiZero
+SoftQCD:all = off
+HardQCD:all = on
+! Hard:all = off
+! Multiparton interactions:all = off
+ParticleDecays:limitTau0 = on
+ParticleDecays:tau0Max = 10
 ! WeakBosonAndParton:qg2gmZq = on     !
 ! WeakBosonAndParton:qqbar2gmZg = on  !
-!WeakZ0:gmZmode = 2                  ! (default = 0; minimum = 0; maximum = 2)
+! WeakZ0:gmZmode = 2                  ! (default = 0; minimum = 0; maximum = 2)
 111:onMode = off                    ! Turn off Pi0 decays
 111:onIfMatch = 22 22              ! Turn on decays into Pi0
+! 111:oneChannel = 22 22
+! 111:multiplicity = 1
+! 111:product1 = 22
+! 111:product2 = 22
 PhaseSpace:pTHatMin = 20.0         ! Added for PiZero
 ! PhaseSpace:mHatMin = 80.             ! Z window
 ! PhaseSpace:mHatMax = 150.           ! Z window
@@ -46,3 +59,6 @@ ParticleDecays:limitTau0 = on      ! set long-lived particle stable ... (Added f
 ParticleDecays:tau0Max = 10        ! ... if c*tau0 > 10 mm (Added for PiZero)
 ParticleDecays:limitRadius = on      ! Added for PiZero
 ParticleDecays:rMax = 0.4            ! Added for PiZero
+
+Random:setSeed = on
+Random:seed = 12345
