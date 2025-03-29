@@ -15,6 +15,7 @@ Next:numberShowProcess = 0         ! print process record n times
 Next:numberShowEvent = 0           ! print event record n times
 
 ! 3) Beam parameter settings. Values below agree with default ones.
+Beams:frameType = 1                ! Default is 1
 Beams:idA = 2212                   ! first beam, p = 2212, pbar = -2212
 Beams:idB = 2212                   ! second beam, p = 2212, pbar = -2212
 Beams:eCM = 14000.                 ! CM energy of collision
@@ -22,28 +23,28 @@ Beams:eCM = 14000.                 ! CM energy of collision
 
 ! 4) Settings for the hard-process generation.
 ! Example 1: QCD + prompt photon production; must set pTmin.
-! HardQCD:all = on                       ! Added for PiZero
-! HadronLevel:all = on                   ! Added for PiZero
-SoftQCD:all = off
-HardQCD:all = on
-! Hard:all = off
+HardQCD:all = on                       ! Added for PiZero
+HadronLevel:all = on                   ! Added for PiZero
+! SoftQCD:all = on
+! ParticleDecays:allowPhotonRadiation = off
 ! Multiparton interactions:all = off
-ParticleDecays:limitTau0 = on
-ParticleDecays:tau0Max = 10
+! ParticleDecays:limitTau0 = on
+! ParticleDecays:tau0Max = 10
 ! WeakBosonAndParton:qg2gmZq = on     !
 ! WeakBosonAndParton:qqbar2gmZg = on  !
 ! WeakZ0:gmZmode = 2                  ! (default = 0; minimum = 0; maximum = 2)
 111:onMode = off                    ! Turn off Pi0 decays
-111:onIfMatch = 22 22              ! Turn on decays into Pi0
+! 111:onIfMatch = 22 22              ! Turn on decays into Pi0
 ! 111:oneChannel = 22 22
+111:oneChannel = 1 1.0 22 22
 ! 111:multiplicity = 1
 ! 111:product1 = 22
 ! 111:product2 = 22
-PhaseSpace:pTHatMin = 20.0         ! Added for PiZero
-! PhaseSpace:mHatMin = 80.             ! Z window
-! PhaseSpace:mHatMax = 150.           ! Z window
+PhaseSpace:pTHatMin =  50.0         ! Added for PiZero
+PhaseSpace:mHatMin = 80.             ! Z window
+PhaseSpace:mHatMax = 150.           ! Z window
 ! PhaseSpace:pTHatMin = 50.         ! minimal pT scale in process
-!23:oneChannel = 1 1 meMode product1 product2
+! 23:oneChannel = 1 1 meMode product1 product2
 
 
 ! 5) Switch on/off the key event generation steps.
@@ -55,10 +56,7 @@ PhaseSpace:pTHatMin = 20.0         ! Added for PiZero
 
 ! 6) Other settings. Can be expanded as desired.
 !Tune:pp = 6                        ! use Tune 4Cx
-ParticleDecays:limitTau0 = on      ! set long-lived particle stable ... (Added for PiZero)
-ParticleDecays:tau0Max = 10        ! ... if c*tau0 > 10 mm (Added for PiZero)
+! ParticleDecays:limitTau0 = on      ! set long-lived particle stable ... (Added for PiZero)
+! ParticleDecays:tau0Max = 10        ! ... if c*tau0 > 10 mm (Added for PiZero)
 ParticleDecays:limitRadius = on      ! Added for PiZero
 ParticleDecays:rMax = 0.4            ! Added for PiZero
-
-Random:setSeed = on
-Random:seed = 12345

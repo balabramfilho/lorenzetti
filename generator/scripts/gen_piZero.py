@@ -57,6 +57,7 @@ def run(args):
     tape = EventTape( "EventTape", OutputFile = args.output_file, RunNumber = args.run_number)
 
     main_file = os.environ['LZT_PATH']+'/generator/evtgen/data/PiZero_config.cmnd'
+    # main_file = os.environ['LZT_PATH']+'/generator/evtgen/data/main_442.cmnd'
 
     PiZero = PiZero( "PiZero", 
               Pythia8("Generator", 

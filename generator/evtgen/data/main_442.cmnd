@@ -1,0 +1,11 @@
+Beams:eCM = 7000.
+SoftQCD:nonDiffractive = on
+Ropewalk:RopeHadronization = on
+Ropewalk:doShoving = off
+Ropewalk:doFlavour = on
+Ropewalk:r0 = 0.5
+Ropewalk:m0 = 0.2
+Ropewalk:beta = 0.1
+PartonVertex:setVertex = on
+ParticleDecays:limitTau0 = on
+ParticleDecays:tau0Max = 10
