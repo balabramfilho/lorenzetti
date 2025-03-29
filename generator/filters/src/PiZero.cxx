@@ -63,6 +63,47 @@ StatusCode PiZero::execute( generator::Event &ctx )
   if (generator()->execute(evt).isFailure()){
     return StatusCode::FAILURE;
   }
+
+  std::vector<const HepMC3::GenParticle*> piZeroContainer; 
+  for (auto part : evt.particles()) 
+  {
+    if (part->pid() == 111 && ParticleHelper::isFinal(part.get()) )
+    {
+      // MSG_DEBUG("Found 2 photons.")
+      // if ( std::abs(part->momentum().eta()) < m_etaMax && part->momentum().pt() > (m_minPt/1.e3) ){
+        piZeroContainer.push_back( part.get() );
+        float piZeroPt = part->momentum().pt() / 1e3;  // Convert pt to GeV if needed
+        float piZeroEta = part->momentum().eta();
+        float piZeroPhi = part->momentum().phi();
+        float piZeroPx = part->momentum().px();
+        float piZeroPy = part->momentum().py();
+        float piZeroPz = part->momentum().pz();
+        MSG_DEBUG(Form("This is a PiZero (%i) with pt = %.3f GeV, eta = %.3f and phi = %.3f and vertex x = %.3f y = %.3f z = %.3f ", part->pid(), piZeroPt, piZeroEta, piZeroPhi, piZeroPx, piZeroPy, piZeroPz))
+      // }
+    }
+
+    // // Get and print the children (decay products) of the PiZero
+    // for (int iChild = 0; iChild < part->children().size(); ++iChild) {
+    //   const HepMC3::GenParticle* child = part->children().at(iChild);
+
+    //   if (child != nullptr) {
+    //       // Extract child particle properties
+    //       int childPid = child->pid();
+    //       float childPt = child->momentum().pt() / 1e3;  // Convert pt to GeV
+    //       float childEta = child->momentum().eta();
+    //       float childPhi = child->momentum().phi();
+    //       float childPx = child->momentum().px();
+    //       float childPy = child->momentum().py();
+    //       float childPz = child->momentum().pz();
+
+    //       // Print child particle information
+    //       MSG_DEBUG(Form("PiZero child: pid = %i, pt = %.3f GeV, eta = %.3f, phi = %.3f, px = %.3f, py = %.3f, pz = %.3f", 
+    //                      childPid, childPt, childEta, childPhi, childPx, childPy, childPz));
+    //     }
+    // }
+  }
+
+
   // photonContainer = PiZero::buildPhotonContainer(evt);
   std::vector<const HepMC3::GenParticle*> photonContainer; 
   for (auto part : evt.particles()) 
