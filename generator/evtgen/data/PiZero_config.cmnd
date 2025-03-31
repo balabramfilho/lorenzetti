@@ -37,6 +37,7 @@ HadronLevel:all = on                   ! Added for PiZero
 ! 111:onIfMatch = 22 22              ! Turn on decays into Pi0
 ! 111:oneChannel = 22 22
 111:oneChannel = 1 1.0 22 22
+111:mayDecay = true
 ! 111:multiplicity = 1
 ! 111:product1 = 22
 ! 111:product2 = 22

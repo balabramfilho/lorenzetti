@@ -16,6 +16,8 @@ namespace generator{
       virtual StatusCode initialize() override;
       virtual StatusCode execute( Event& ) override;
       // virtual std::vector<const HepMC3::GenParticle*> buildPhotonContainer ( Evt& );
+      StatusCode displayParticleInfo(const HepMC3::GenParticle* particle);
+      StatusCode displayMotherInfo(const HepMC3::GenParticle* particle);
       virtual StatusCode finalize() override;
   
     private:

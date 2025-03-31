@@ -30,6 +30,37 @@ StatusCode PiZero::initialize()
   return StatusCode::SUCCESS;
 }
 
+StatusCode PiZero::displayParticleInfo(const HepMC3::GenParticle* particle){
+  // Retrieve momentum properties of the mother particle
+  int pid = particle->pid();
+  float pt = particle->momentum().pt() / 1e3;  // Convert pt to GeV
+  float eta = particle->momentum().eta();
+  float phi = particle->momentum().phi();
+  float px = particle->momentum().px();
+  float py = particle->momentum().py();
+  float pz = particle->momentum().pz();
+
+  MSG_DEBUG(Form("This particle has PID = %i with pt = %.3f GeV, eta = %.3f and phi = %.3f and pos x = %.3f y = %.3f z = %.3f ", pid, pt, eta, phi, px, py, pz))
+
+  return StatusCode::SUCCESS;
+}
+
+StatusCode PiZero::displayMotherInfo(const HepMC3::GenParticle* particle){
+  auto mother = particle->parents().at(0); // Get the first parent
+  // Retrieve momentum properties of the mother particle
+  int pid = mother->pid();
+  float pt = mother->momentum().pt() / 1e3;  // Convert pt to GeV
+  float eta = mother->momentum().eta();
+  float phi = mother->momentum().phi();
+  float px = mother->momentum().px();
+  float py = mother->momentum().py();
+  float pz = mother->momentum().pz();
+
+  MSG_DEBUG(Form("This mother particle has PID = %i with pt = %.3f GeV, eta = %.3f and phi = %.3f and pos x = %.3f y = %.3f z = %.3f ", pid, pt, eta, phi, px, py, pz))
+
+  return StatusCode::SUCCESS;
+}
+
 // StatusCode PiZero::buildPhotonContainer(HepMC3::GenEvent evt)
 // {
 //   std::vector<const HepMC3::GenParticle*> photonContainer; 
@@ -64,64 +95,28 @@ StatusCode PiZero::execute( generator::Event &ctx )
     return StatusCode::FAILURE;
   }
 
-  std::vector<const HepMC3::GenParticle*> piZeroContainer; 
+  std::vector<const HepMC3::GenParticle*> piZeroContainer;
+  std::vector<const HepMC3::GenParticle*> photonContainer;
+  bool display_particle_information = true;
   for (auto part : evt.particles()) 
   {
-    if (part->pid() == 111 && ParticleHelper::isFinal(part.get()) )
+    if (part->pid() == 111 )
     {
-      // MSG_DEBUG("Found 2 photons.")
-      // if ( std::abs(part->momentum().eta()) < m_etaMax && part->momentum().pt() > (m_minPt/1.e3) ){
-        piZeroContainer.push_back( part.get() );
-        float piZeroPt = part->momentum().pt() / 1e3;  // Convert pt to GeV if needed
-        float piZeroEta = part->momentum().eta();
-        float piZeroPhi = part->momentum().phi();
-        float piZeroPx = part->momentum().px();
-        float piZeroPy = part->momentum().py();
-        float piZeroPz = part->momentum().pz();
-        MSG_DEBUG(Form("This is a PiZero (%i) with pt = %.3f GeV, eta = %.3f and phi = %.3f and vertex x = %.3f y = %.3f z = %.3f ", part->pid(), piZeroPt, piZeroEta, piZeroPhi, piZeroPx, piZeroPy, piZeroPz))
-      // }
+      // MSG_DEBUG("Adding one Pi0 to PiZeroContainer.")
+      piZeroContainer.push_back( part.get() );
     }
-
-    // // Get and print the children (decay products) of the PiZero
-    // for (int iChild = 0; iChild < part->children().size(); ++iChild) {
-    //   const HepMC3::GenParticle* child = part->children().at(iChild);
-
-    //   if (child != nullptr) {
-    //       // Extract child particle properties
-    //       int childPid = child->pid();
-    //       float childPt = child->momentum().pt() / 1e3;  // Convert pt to GeV
-    //       float childEta = child->momentum().eta();
-    //       float childPhi = child->momentum().phi();
-    //       float childPx = child->momentum().px();
-    //       float childPy = child->momentum().py();
-    //       float childPz = child->momentum().pz();
-
-    //       // Print child particle information
-    //       MSG_DEBUG(Form("PiZero child: pid = %i, pt = %.3f GeV, eta = %.3f, phi = %.3f, px = %.3f, py = %.3f, pz = %.3f", 
-    //                      childPid, childPt, childEta, childPhi, childPx, childPy, childPz));
-    //     }
-    // }
-  }
-
-
-  // photonContainer = PiZero::buildPhotonContainer(evt);
-  std::vector<const HepMC3::GenParticle*> photonContainer; 
-  for (auto part : evt.particles()) 
-  {
     if (part->pid() == 22 && ParticleHelper::isFinal(part.get()) )
     {
-      // MSG_DEBUG("Found 2 photons.")
-      // if ( std::abs(part->momentum().eta()) < m_etaMax && part->momentum().pt() > (m_minPt/1.e3) ){
+      // MSG_DEBUG("Adding one Pi0 to PiZeroContainer.")
       photonContainer.push_back( part.get() );
-      // }
     }
   }
 
-  // // Sort the photonContainer based on pt() using a lambda function as comparator
-  // std::sort(photonContainer.begin(), photonContainer.end(), 
-  // [](const HepMC3::GenParticle* a, const HepMC3::GenParticle* b) {
-  //     return a->momentum().pt() > b->momentum().pt();
-  // });
+  // Sort the photonContainer based on pt() using a lambda function as comparator
+  std::sort(photonContainer.begin(), photonContainer.end(), 
+  [](const HepMC3::GenParticle* a, const HepMC3::GenParticle* b) {
+      return a->momentum().pt() > b->momentum().pt();
+  });
     
   const auto main_event_t = sample_t();
   const auto main_event_z = sample_z();
@@ -129,31 +124,7 @@ StatusCode PiZero::execute( generator::Event &ctx )
   std::vector<const HepMC3::GenParticle*> PiZero;
   std::vector<const HepMC3::GenParticle*> realPiZero;
 
-  // // Get the mother of the current photon
-  // auto mother = photon->parents().at(0);
-
-  // // Check if this photon has a Pi0 mother
-  // if (mother->pid() == 111) {
-  //     MSG_DEBUG("Has mother PiZero.")
-
-  //     // Store the first photon’s Pi0 mother
-  //     if (!pi0Mother) {
-  //         pi0Mother = mother;
-  //     }
-
-  //     // Check if the photon has the same Pi0 mother
-  //     if (mother == pi0Mother) {
-  //         // If the photon has the same Pi0 mother, check the kinematic cuts
-  //         float eta = photon->momentum().eta();
-  //         float pt = photon->momentum().pt();
-  //         if (std::abs(eta) < m_etaMax && pt > (m_minPt / 1.e3)) {
-  //             realPiZero.push_back(photon);
-  //             MSG_DEBUG("Found a photon with the same Pi0 mother.")
-  //         }
-  //     } else {
-  //         MSG_DEBUG("Photon has a different mother.");
-  //     }
-
+  // build realPizero
   if (photonContainer.size() >= 2){
     // const xAOD::TruthParticle* pi0Mother = nullptr;
     for (auto photon :photonContainer){
@@ -168,26 +139,20 @@ StatusCode PiZero::execute( generator::Event &ctx )
         float motherPy = mother->momentum().py();
         float motherPz = mother->momentum().pz();
         MSG_DEBUG(Form("Has mother PiZero (%i) with pt = %.3f GeV, eta = %.3f and phi = %.3f and vertex x = %.3f y = %.3f z = %.3f ", mother->pid(), motherPt, motherEta, motherPhi, motherPx, motherPy, motherPz))
+        displayMotherInfo(photon); // mother info
         float eta = photon->momentum().eta();
         float pt = photon->momentum().pt();
         if (std::abs(eta) < m_etaMax && pt > (m_minPt / 1.e3)) {
               realPiZero.push_back(photon);
+              displayParticleInfo(photon); // photon info
+              MSG_INFO("Add particle with PDGID " << photon->pid() << " and pos x="<< photon->momentum().px() <<", y=" <<photon->momentum().py() <<", z=" << photon->momentum().pz() <<" into the context."); 
               MSG_DEBUG("Found a photon with Pi0 mother.")
         }
-        
-        // float motherPt = mother->momentum().pt() / 1e3;  // Convert pt to GeV if needed
-        // float motherEta = mother->momentum().eta();
-        // MSG_DEBUG(Form("Has mother PiZero with pt = %.3f GeV and eta = %.3f", motherPt, motherEta))
-        // float eta = photon->momentum().eta();
-        // float pt = photon->momentum().pt();
-        // if ( std::abs(eta) < m_etaMax && pt > (m_minPt/1.e3) ){
-        //   realPiZero.push_back( photon );
-        //   MSG_DEBUG("Found a photon.")
-        // }
       }// From Pi0?
     }
   }
 
+  // build regular piZero
   for (auto part : evt.particles()) 
   {
     // MSG_DEBUG("Particle info:\n" <<
@@ -216,10 +181,10 @@ StatusCode PiZero::execute( generator::Event &ctx )
     }// Is photon?
   }
 
-  if ( PiZero.empty() ){
-    MSG_DEBUG( "There is no PiZero event inside of this event.");
-    // throw NotInterestingEvent();
-  }
+  // if ( PiZero.empty() ){
+  //   MSG_DEBUG( "There is no PiZero event inside of this event.");
+  //   // throw NotInterestingEvent();
+  // }
 
   // checks if there's a real PiZero that has two photons decaying from same particle pdgid
   if ( realPiZero.size() < 2 ){
@@ -227,21 +192,18 @@ StatusCode PiZero::execute( generator::Event &ctx )
     throw NotInterestingEvent();
   }
 
-  // if (m_forceForwardPhoton){
-  //   int fwdPhotonCounter = 0;
-  //   for ( auto& e : PiZero ){
-  //     float eta = e->momentum().eta();
-  //     if (std::abs(eta) > 2.5 && std::abs(eta) < 3.2){
-  //       fwdPhotonCounter++;
-  //     }
-  //   }
-  //   if (fwdPhotonCounter == 0 || fwdPhotonCounter > 1){
-  //     MSG_INFO("No forward photons or two forward photons");
-  //     throw NotInterestingEvent();
-  //   }
-  // }
+  MSG_INFO("Filling realPiZero events into the context...");
 
-  MSG_INFO("Filling PiZero events into the context...");
+  MSG_DEBUG("Print all photons in  photonContainer...");
+  for (auto photon :photonContainer){
+    displayParticleInfo(photon);
+  }
+  MSG_DEBUG("[END] Print all photons in  photonContainer...");
+  MSG_DEBUG("Print all piZero in  piZeroContainer...");
+  for (auto piZero :piZeroContainer){
+    displayParticleInfo(piZero);
+  }
+  MSG_DEBUG("[END] Print all piZero in  piZeroContainer...");
 
   // Each photon is a seed
   for ( auto& p : realPiZero ){
@@ -272,10 +234,12 @@ StatusCode PiZero::execute( generator::Event &ctx )
                        p->momentum().e(), 
                        p->momentum().pt() ); 
     // MSG_INFO("Add particle with PDGID " << e->pid() << " into the context.");
+    // const HepMC3::GenParticle* mother = p->parents().at(0);
+    displayMotherInfo(p); // mother info
+    displayParticleInfo(p); // photon info
     MSG_INFO("Add particle with PDGID " << p->pid() << " and vertex x="<< vtx->position().px() <<", y=" <<vtx->position().py() <<", z=" << zVertexPos <<", t="<< vtx->position().t()+main_event_t <<" into the context."); 
     ctx.push_back( seed );
   }
-  
 
   ctx.setEventNumber(evt.event_number());
   return StatusCode::SUCCESS;
